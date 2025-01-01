@@ -1,9 +1,16 @@
-import { Venue } from '@/app/types/venue';
+import { Venue } from '@/types/venue';
 
 export const venues: Venue[] = [
   {
     id: "1",
     name: "Main Convention Center",
+    image: "/images/venues/convention-center.jpg",
+    location: "Downtown Business District",
+    capacity: 2000,
+    description: "State-of-the-art convention center with multiple configurable spaces",
+    amenities: ["Parking", "WiFi", "Security", "Catering"],
+    price: 5000,
+    address: "123 Convention Ave, Business District",
     halls: [
       {
         id: "h1",

@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Program } from '@/app/types/program'
+import { Program } from '@/lib/data/programs'
 
 interface BookingSectionProps {
-  program: Program
+  program: Program;
 }
 
 export function BookingSection({ program }: BookingSectionProps) {
@@ -18,9 +18,21 @@ export function BookingSection({ program }: BookingSectionProps) {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const ticketTypes = {
-    standard: { price: 99, name: 'Standard', description: 'Access to all regular sessions' },
-    vip: { price: 199, name: 'VIP', description: 'Priority seating, exclusive networking events' },
-    student: { price: 49, name: 'Student', description: 'Valid student ID required' }
+    standard: { 
+      price: program.ticketPrice, 
+      name: 'Standard', 
+      description: 'Access to all regular sessions' 
+    },
+    vip: { 
+      price: program.ticketPrice * 2, 
+      name: 'VIP', 
+      description: 'Priority seating, exclusive networking events' 
+    },
+    student: { 
+      price: program.ticketPrice * 0.5, 
+      name: 'Student', 
+      description: 'Valid student ID required' 
+    }
   };
 
   const handleBooking = async () => {

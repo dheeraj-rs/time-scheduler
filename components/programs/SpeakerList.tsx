@@ -1,15 +1,14 @@
 "use client"
 
-import { Session, Speaker } from '@/app/types/program'
 import { Card } from "@/components/ui/card"
 import { Clock } from "lucide-react"
-
+import { Session, Speaker } from "@/types/program"
 interface SpeakerListProps {
   sessions: Session[]
   editMode?: boolean
 }
 
-export function SpeakerList({ sessions, editMode }: SpeakerListProps) {
+export function SpeakerList({ sessions }: SpeakerListProps) {
   // Get unique speakers from all sessions
   const speakers = Array.from(
     new Set(

@@ -2,8 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Calendar, CheckCircle } from "lucide-react"
-import { Program } from "@/app/types/program"
 import { format } from "date-fns"
+import { Program } from "@/types/program"
 import Link from "next/link"
 
 interface ProgramStatusTabsProps {

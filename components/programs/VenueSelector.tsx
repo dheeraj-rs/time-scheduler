@@ -13,7 +13,7 @@ export function VenueSelector({ onVenueChange }: VenueSelectorProps) {
   const [selectedVenue, setSelectedVenue] = useState<string>('')
   const [selectedHall, setSelectedHall] = useState<string>('')
 
-  const venue = venues.find(v => v.id === selectedVenue)
+  const venue = venues.find(v => v.id.toString() === selectedVenue)
   const hall = venue?.halls.find(h => h.id === selectedHall)
 
   return (
@@ -32,7 +32,7 @@ export function VenueSelector({ onVenueChange }: VenueSelectorProps) {
           </SelectTrigger>
           <SelectContent>
             {venues.map((venue) => (
-              <SelectItem key={venue.id} value={venue.id}>
+              <SelectItem key={venue.id} value={venue.id.toString()}>
                 {venue.name}
               </SelectItem>
             ))}
@@ -52,7 +52,7 @@ export function VenueSelector({ onVenueChange }: VenueSelectorProps) {
             </SelectTrigger>
             <SelectContent>
               {venue?.halls.map((hall) => (
-                <SelectItem key={hall.id} value={hall.id}>
+                <SelectItem key={hall.id} value={hall.id.toString()}>
                   {hall.name}
                 </SelectItem>
               ))}
@@ -72,7 +72,7 @@ export function VenueSelector({ onVenueChange }: VenueSelectorProps) {
             </SelectTrigger>
             <SelectContent>
               {hall?.stages.map((stage) => (
-                <SelectItem key={stage.id} value={stage.id}>
+                <SelectItem key={stage.id} value={stage.id.toString()}>
                   {stage.name} (Capacity: {stage.capacity})
                 </SelectItem>
               ))}

@@ -6,9 +6,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Save } from "lucide-react"
+import { Session } from '@/types/program'
 
 interface AddSessionDialogProps {
   children: ReactNode
+  onAddSession: (newSession: Session) => void
 }
 
 export function AddSessionDialog({ children }: AddSessionDialogProps) {

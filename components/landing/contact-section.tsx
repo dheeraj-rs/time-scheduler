@@ -28,7 +28,7 @@ export function ContactSection() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Contact Us</h2>
           <p className="text-center text-muted-foreground mb-12">
-            Have questions? We're here to help with your conference needs.
+            Have questions? We&apos;re here to help with your conference needs.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">

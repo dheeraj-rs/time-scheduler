@@ -13,10 +13,15 @@ import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { VenueSelector } from './VenueSelector'
-import { Session } from '@/app/types/program'
 import { ScheduleManager } from './ScheduleManager'
+import { Session } from '@/types/program'
 
-export function ProgramForm() {
+interface ProgramFormProps {
+  hallId: string;
+  onSuccess: () => void;
+}
+
+export function ProgramForm({ }: ProgramFormProps) {
   const router = useRouter()
   const [date, setDate] = useState<Date>()
   const [sessions, setSessions] = useState<Partial<Session>[]>([])

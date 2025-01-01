@@ -1,13 +1,11 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Program } from "@/app/types/program"
 import { format } from "date-fns"
 import { isSameDay } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Calendar } from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Program } from "@/types/program"
 
 interface ProgramCalendarProps {
   programs: Program[]
@@ -39,12 +37,12 @@ export function ProgramCalendar({
               return (
                 <Button
                   key={day}
-                  variant={isSameDay(date, selectedDate) ? "default" : "outline"}
+                  variant={selectedDate && isSameDay(date, selectedDate) ? "default" : "outline"}
                   className={cn(
                     "w-[calc(14.28%-8px)] aspect-square p-0 flex flex-col items-center justify-center transition-all",
                     hasPrograms && "border-primary ring-1 ring-primary/20",
                     !hasPrograms && "opacity-50 hover:opacity-75",
-                    isSameDay(date, selectedDate) && "shadow-md scale-105"
+                    selectedDate && isSameDay(date, selectedDate) && "shadow-md scale-105"
                   )}
                   onClick={() => onDateSelect(date)}
                 >

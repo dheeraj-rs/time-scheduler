@@ -1,6 +1,5 @@
 "use client"
 
-import { Session } from "@/app/types/program"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -14,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { Save, AlertCircle } from "lucide-react"
 import { isBreakTime } from "@/lib/utils/time"
+import { Session } from "@/types/program"
 
 interface EditSessionDialogProps {
   session: Session

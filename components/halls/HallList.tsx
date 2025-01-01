@@ -5,16 +5,18 @@ import { Card } from "@/components/ui/card"
 import { ChevronRight } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { sampleHalls } from "@/lib/sample-data"
+import { Stage } from "@/types/venue"
 
 interface HallListProps {
   searchQuery: string
 }
 
+
 export function HallList({ searchQuery }: HallListProps) {
   const router = useRouter()
   const filteredHalls = sampleHalls.filter(hall =>
     hall.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    hall.stages.some(stage => stage.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    hall.stages.some((stage: Stage) => stage.name.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   return (
@@ -44,7 +46,7 @@ export function HallList({ searchQuery }: HallListProps) {
                   Capacity: {hall.capacity} people
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {hall.stages.map(stage => (
+                  {hall.stages.map((stage: Stage) => (
                     <span 
                       key={stage.id} 
                       className="text-xs bg-secondary px-2 py-1 rounded-full"

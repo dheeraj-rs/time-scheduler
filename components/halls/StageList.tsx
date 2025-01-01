@@ -1,8 +1,8 @@
-import { Stage } from "@/app/types/program"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, Users } from "lucide-react"
 import Link from "next/link"
+import { Stage } from "@/types/venue"
 
 interface StageListProps {
   stages: Stage[]
@@ -11,7 +11,7 @@ interface StageListProps {
 }
 
 export function StageList({ stages, hallId, searchQuery }: StageListProps) {
-  const filteredStages = stages.filter(stage =>
+  const filteredStages = stages.filter((stage: Stage) =>
     stage.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 

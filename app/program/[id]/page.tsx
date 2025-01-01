@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Calendar, Clock, Users, MapPin, Tag } from 'lucide-react';
+import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { programs } from '@/lib/data/programs';
@@ -8,6 +8,7 @@ import { Schedule } from '@/components/program/schedule';
 import { SpeakerList } from '@/components/program/speaker-list';
 import { BookingSection } from '@/components/program/booking-section';
 import { getProgramById } from '@/lib/data/programs';
+import Link from 'next/link';
 
 interface Props {
   params: {
@@ -45,6 +46,14 @@ export default function ProgramDetails({ params }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-12">
+       <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ← Back to Home
+          </Link>
+        </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <Card>

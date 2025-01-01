@@ -2,13 +2,8 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 
-interface ScheduleProps {
-  programId: number;
-}
-
-export function Schedule({ programId }: ScheduleProps) {
+export function Schedule() {
   const schedule = [
     {
       time: "09:00 - 10:00",

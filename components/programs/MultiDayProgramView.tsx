@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { Program, Hall, Stage } from '@/app/types/program'
 import { Card } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { format, addDays, isSameDay } from 'date-fns'
 import { Calendar, Clock, MapPin, Users, Ticket } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
+import { Program, Hall } from '@/types/program'
 interface MultiDayProgramViewProps {
   startDate: Date
   programs: Program[]

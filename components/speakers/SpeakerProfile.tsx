@@ -1,11 +1,10 @@
 "use client"
 
-import { Speaker } from '@/app/types/program'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Mail, Phone, Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-
+import { Speaker } from "@/types/program"
 interface SpeakerProfileProps {
   speaker: Speaker
 }

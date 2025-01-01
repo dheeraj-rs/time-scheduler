@@ -1,16 +1,15 @@
 "use client"
 
 import { useState } from 'react'
-import { Program, Session } from '@/app/types/program'
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, Clock, MapPin, Edit2, Plus, Save } from "lucide-react"
-import { SessionList } from './SessionList'
+import { Calendar, MapPin, Edit2, Plus, Save } from "lucide-react"
 import { SpeakerList } from './SpeakerList'
 import { AddSessionDialog } from './AddSessionDialog'
 import { format } from 'date-fns'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
+import { Program } from '@/types/program'
+import { Session } from '@/types/program'
 
 interface ProgramDetailProps {
   program: Program
@@ -28,25 +27,7 @@ export function ProgramDetail({ program: initialProgram }: ProgramDetailProps) {
     }))
   }
 
-  const handleUpdateSession = (sessionId: string, updatedSession: Session, adjustedSessions: Session[]) => {
-    setProgram(prev => ({
-      ...prev,
-      sessions: prev.sessions.map(session => {
-        if (session.id === sessionId) return updatedSession
-        const adjustedSession = adjustedSessions.find(adj => adj.id === session.id)
-        return adjustedSession || session
-      })
-    }))
-  }
-
-  const handleDeleteSession = (sessionId: string) => {
-    setProgram(prev => ({
-      ...prev,
-      sessions: prev.sessions.filter(session => session.id !== sessionId)
-    }))
-  }
-
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return
 
     const items = Array.from(sessions)

@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Hall } from "@/app/types/program"
+import { Hall } from '@/types'
 
 interface AddHallDialogProps {
   children: ReactNode
   halls: Hall[]
 }
 
-export function AddHallDialog({ children, halls }: AddHallDialogProps) {
+export function AddHallDialog({ children }: AddHallDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>

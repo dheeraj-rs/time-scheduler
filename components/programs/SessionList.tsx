@@ -1,12 +1,11 @@
 "use client"
 
-import { Session } from '@/app/types/program'
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, Trash2, Edit2 } from "lucide-react"
 import { format } from 'date-fns'
 import { EditSessionDialog } from './EditSessionDialog'
-
+import { Session } from '@/types/program'
 interface SessionListProps {
   sessions: Session[]
   editMode: boolean

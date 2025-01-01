@@ -14,6 +14,9 @@ export default function Programs() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date>()
   
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(false)
+  
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-6">
@@ -32,13 +35,15 @@ export default function Programs() {
         </div>
 
         <div className="flex flex-col gap-4">
-        <Card className="p-4">
-            <ProgramCalendar 
-              programs={samplePrograms}
-              onDateSelect={setSelectedDate}
-              selectedDate={selectedDate}
-              limitedDays={[28, 29, 30]}
-            />
+          <Card className="p-4">
+            {!isLoading && (
+              <ProgramCalendar 
+                programs={samplePrograms}
+                onDateSelect={setSelectedDate}
+                selectedDate={selectedDate}
+                limitedDays={[28, 29, 30]}
+              />
+            )}
           </Card>
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -49,8 +54,6 @@ export default function Programs() {
               className="pl-8"
             />
           </div>
-          
-          
         </div>
       </div>
 

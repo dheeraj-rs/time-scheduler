@@ -19,4 +19,20 @@ export interface Hall {
     height: number;
   };
   stallCategories: StallCategory[];
+}
+
+export interface HallWithDetails extends Hall {
+  stages: {
+    id: string
+    name: string
+    totalStalls: number
+    availableStalls: number
+  }[]
+  currentPrograms: {
+    id: string
+    name: string
+    stage: string
+    attendees: number
+    capacity: number
+  }[]
 } 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Plus, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -8,15 +8,29 @@ import { Card } from "@/components/ui/card"
 import { ProgramCalendar } from "@/components/programs/ProgramCalendar"
 import { HallList } from "@/components/halls/HallList"
 import { AddHallDialog } from "@/components/halls/AddHallDialog"
-import { samplePrograms, sampleHalls } from "@/lib/sample-data"
+import { samplePrograms } from "@/lib/sample-data"
 
 export default function Programs() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date>()
-  
-  // Add loading state
   const [isLoading, setIsLoading] = useState(false)
-  
+
+  useEffect(() => {
+    const loadPrograms = async () => {
+      setIsLoading(true)
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      } catch (error) {
+        console.error('Failed to load programs:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    loadPrograms()
+  }, [])
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-6">
@@ -27,7 +41,7 @@ export default function Programs() {
               Manage halls and view program schedules
             </p>
           </div>
-          <AddHallDialog halls={sampleHalls}>
+          <AddHallDialog halls={samplePrograms}>
             <Button variant="outline">
               <Plus className="mr-2 h-4 w-4" /> New Hall
             </Button>
@@ -36,7 +50,9 @@ export default function Programs() {
 
         <div className="flex flex-col gap-4">
           <Card className="p-4">
-            {!isLoading && (
+            {isLoading ? (
+              <div>Loading programs...</div>
+            ) : (
               <ProgramCalendar 
                 programs={samplePrograms}
                 onDateSelect={setSelectedDate}

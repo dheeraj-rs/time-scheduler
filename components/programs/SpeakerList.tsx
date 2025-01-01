@@ -1,45 +1,48 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
-import { Clock } from "lucide-react"
-import { Session, Speaker } from "@/types/program"
+import { Button } from "@/components/ui/button"
+import { Edit2, Trash2 } from "lucide-react"
+
 interface SpeakerListProps {
-  sessions: Session[]
-  editMode?: boolean
+  speakers: Array<{
+    name: string;
+    role: string;
+  }>;
+  editMode: boolean;
+  onEdit?: (index: number, speaker: { name: string; role: string }) => void;
+  onDelete?: (index: number) => void;
 }
 
-export function SpeakerList({ sessions }: SpeakerListProps) {
-  // Get unique speakers from all sessions
-  const speakers = Array.from(
-    new Set(
-      sessions.flatMap(session => session.speakers)
-        .filter((speaker): speaker is Speaker => speaker !== undefined)
-    )
-  )
-
+export function SpeakerList({ speakers, editMode, onEdit, onDelete }: SpeakerListProps) {
   return (
-    <Card className="p-6">
-      <div className="space-y-4">
-        {speakers.length === 0 ? (
-          <p className="text-muted-foreground text-center">No speakers assigned</p>
-        ) : (
-          speakers.map((speaker) => (
-            <div key={speaker.id} className="p-4 rounded-lg border bg-card">
-              <h3 className="font-medium">{speaker.name}</h3>
-              <div className="mt-2 text-sm text-muted-foreground">
-                {sessions
-                  .filter(session => session.speakers.some(sp => sp.id === speaker.id))
-                  .map(session => (
-                    <div key={session.id} className="flex items-center mt-1">
-                      <Clock className="mr-2 h-4 w-4" />
-                      {session.title} ({session.timeSlot.start.toLocaleTimeString()} - {session.timeSlot.end.toLocaleTimeString()})
-                    </div>
-                  ))}
-              </div>
+    <Card className="p-4">
+      {speakers.map((speaker, index) => (
+        <div key={index} className="flex justify-between items-start py-2">
+          <div>
+            <h3 className="font-medium">{speaker.name}</h3>
+            <p className="text-sm text-muted-foreground">{speaker.role}</p>
+          </div>
+          {editMode && (
+            <div className="flex gap-2">
+              <Button 
+                size="sm" 
+                variant="ghost"
+                onClick={() => onEdit?.(index, speaker)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+              <Button 
+                size="sm" 
+                variant="ghost"
+                onClick={() => onDelete?.(index)}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
             </div>
-          ))
-        )}
-      </div>
+          )}
+        </div>
+      ))}
     </Card>
-  )
+  );
 }

@@ -1,34 +1,80 @@
 "use client"
-import { useState } from 'react'
+
+import { useState, useEffect } from 'react'
+import { use } from 'react'
 import { Button } from "@/components/ui/button"
-import { Plus, Calendar as CalendarIcon, Search } from "lucide-react"
+import { Plus, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { ProgramCalendar } from "@/components/programs/ProgramCalendar"
 import { MultiDayProgramView } from "@/components/programs/MultiDayProgramView"
 import { AddProgramDialog } from "@/components/programs/AddProgramDialog"
-import { format } from 'date-fns'
 import Link from 'next/link'
-import { Program, Hall } from '@/app/types/program'
-import { Program, Hall } from '@/app/types/program'
+import { Hall } from '@/types/program'
+import { Alert, AlertDescription } from "@/components/ui/alert"
+
 interface HallProgramsPageProps {
-  params: {
+  params: Promise<{
     hallId: string
-  }
+  }>
 }
 
 export default function HallProgramsPage({ params }: HallProgramsPageProps) {
+  const { hallId } = use(params)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  
-  // In a real app, you would fetch these based on the hallId
-  const hall: Hall = {
-    id: params.hallId,
-    name: "Main Hall",
-    stages: [
-      { id: "stage1", name: "Stage 1" },
-      { id: "stage2", name: "Stage 2" }
-    ]
+  const [hall, setHall] = useState<Hall | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchHallData = async () => {
+      try {
+        const mockHall: Hall = {
+          id: hallId,
+          name: "Main Hall",
+          capacity: 500,
+          address: "123 Main Street",
+          description: "Main exhibition hall with multiple stages",
+          price: 1000,
+          venueId: 1,
+          venue:'',
+          facilities: ["WiFi", "Parking"],
+          dimensions: { width: 1000, height: 800 },
+          stallCategories: [],
+          stages: [
+            { id: "stage1", name: "Stage 1" },
+            { id: "stage2", name: "Stage 2" }
+          ]
+        }
+        
+        setHall(mockHall)
+      } catch (err) {
+        setError("Failed to load hall data")
+        console.error(err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchHallData()
+  }, [hallId])
+
+  if (isLoading) {
+    return <div className="p-4">Loading...</div>
+  }
+
+  if (error || !hall) {
+    return (
+      <Alert variant="destructive">
+        <AlertDescription>
+          {error || "Hall not found"}
+          <Button variant="link" asChild className="pl-0">
+            <Link href="/admin/programs">Return to Programs</Link>
+          </Button>
+        </AlertDescription>
+      </Alert>
+    )
   }
 
   return (
@@ -52,11 +98,11 @@ export default function HallProgramsPage({ params }: HallProgramsPageProps) {
         
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <Link href={`/admin/programs/${params.hallId}/edit`}>
+            <Link href={`/admin/programs/${hallId}/edit`}>
               Edit Hall
             </Link>
           </Button>
-          <AddProgramDialog hallId={params.hallId}>
+          <AddProgramDialog hallId={hallId}>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               New Program

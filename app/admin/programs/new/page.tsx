@@ -1,7 +1,6 @@
 "use client"
 
 import { ProgramDetailsForm } from '@/components/programs/ProgramDetailsForm'
-import { samplePrograms } from '@/lib/sample-data'
 
 export default function NewProgramPage() {
   return (

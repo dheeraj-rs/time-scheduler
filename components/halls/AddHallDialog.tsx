@@ -1,18 +1,14 @@
 "use client"
 
-import { ReactNode } from 'react'
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Hall } from '@/types'
+import { ReactNode } from "react"
 
-interface AddHallDialogProps {
-  children: ReactNode
-  halls: Hall[]
-}
 
-export function AddHallDialog({ children }: AddHallDialogProps) {
+
+export function AddHallDialog({ children }: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>

@@ -16,11 +16,12 @@ import { cn } from "@/lib/utils"
 import { Program, Speaker } from '@/app/types/program'
 
 interface ProgramDetailsFormProps {
-  initialData?: Partial<Program>
-  isEditing?: boolean
+  initialData: Program;
+  isEditing: boolean;
+  onError?: (error: Error) => void;
 }
 
-export function ProgramDetailsForm({ initialData, isEditing }: ProgramDetailsFormProps) {
+export function ProgramDetailsForm({ initialData, isEditing, onError }: ProgramDetailsFormProps) {
   const router = useRouter()
   const [dateRange, setDateRange] = useState({
     startDate: initialData?.dateRange?.startDate || undefined,

@@ -1,15 +1,16 @@
 "use client"
 
 import { useState } from 'react'
-import { Program, Session } from '@/app/types/program'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, Clock, MapPin, Edit2, Plus, Save, Users, Tag } from "lucide-react"
 import { format } from 'date-fns'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 import { AddSessionDialog } from '@/components/programs/AddSessionDialog'
 import { SpeakerList } from '@/components/programs/SpeakerList'
+import { Program } from '@/types/program'
+import { Session } from '@/types/program'
 
 interface ProgramDetailProps {
   program: Program
@@ -27,16 +28,16 @@ export function ProgramDetail({ program: initialProgram }: ProgramDetailProps) {
     }))
   }
 
-  const handleUpdateSession = (sessionId: string, updatedSession: Session, adjustedSessions: Session[]) => {
-    setProgram(prev => ({
-      ...prev,
-      sessions: prev.sessions.map(session => {
-        if (session.id === sessionId) return updatedSession
-        const adjustedSession = adjustedSessions.find(adj => adj.id === session.id)
-        return adjustedSession || session
-      })
-    }))
-  }
+  // const handleUpdateSession = (sessionId: string, updatedSession: Session, adjustedSessions: Session[]) => {
+  //   setProgram(prev => ({
+  //     ...prev,
+  //     sessions: prev.sessions.map(session => {
+  //       if (session.id === sessionId) return updatedSession
+  //       const adjustedSession = adjustedSessions.find(adj => adj.id === session.id)
+  //       return adjustedSession || session
+  //     })
+  //   }))
+  // }
 
   const handleDeleteSession = (sessionId: string) => {
     setProgram(prev => ({
@@ -45,7 +46,7 @@ export function ProgramDetail({ program: initialProgram }: ProgramDetailProps) {
     }))
   }
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return
 
     const items = Array.from(sessions)

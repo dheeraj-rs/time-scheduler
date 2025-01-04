@@ -72,6 +72,14 @@ export interface Program {
     phone: string;
     website?: string;
   };
+  highlights?: string[];
+  duration: string;
+  language: string;
+  venue: {
+    name: string;
+    address: string;
+    facilities: string;
+  };
 }
 
 export interface Session {

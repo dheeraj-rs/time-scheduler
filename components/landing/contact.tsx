@@ -1,77 +1,109 @@
+"use client";
+
 import React from 'react'
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-function Contact() {
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  }
+};
+
+const Contact = () => {
+  const MotionLink = motion(Link);
+  
   return (
-    <footer className="bg-background border-t">
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div>
-          <h4 className="font-semibold mb-4">Company</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href="/about" className="text-muted-foreground hover:text-foreground">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground">
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-4">Services</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href="/venues" className="text-muted-foreground hover:text-foreground">
-                Find Venues
-              </Link>
-            </li>
-            <li>
-              <Link href="/venues/list" className="text-muted-foreground hover:text-foreground">
-                List Your Venue
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-4">Legal</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link href="/terms" className="text-muted-foreground hover:text-foreground">
-                Terms of Service
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-4">Connect</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                Twitter
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                LinkedIn
-              </Link>
-            </li>
-          </ul>
-        </div>
+    <motion.footer 
+      className="bg-background border-t"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          variants={containerVariants}
+        >
+          {[
+            {
+              title: "Company",
+              links: [
+                { href: "/about", label: "About Us" },
+                { href: "/contact", label: "Contact" }
+              ]
+            },
+            {
+              title: "Services",
+              links: [
+                { href: "/venues", label: "Find Venues" },
+                { href: "/venues/list", label: "List Your Venue" }
+              ]
+            },
+            {
+              title: "Legal",
+              links: [
+                { href: "/privacy", label: "Privacy Policy" },
+                { href: "/terms", label: "Terms of Service" }
+              ]
+            },
+            {
+              title: "Connect",
+              links: [
+                { href: "#", label: "Twitter" },
+                { href: "#", label: "LinkedIn" }
+              ]
+            }
+          ].map((section) => (
+            <motion.div key={section.title} variants={itemVariants}>
+              <motion.h3 
+                className="font-semibold mb-4"
+                variants={itemVariants}
+              >
+                {section.title}
+              </motion.h3>
+              <motion.ul className="space-y-2">
+                {section.links.map((link) => (
+                  <motion.li key={link.label} variants={itemVariants}>
+                    <Link 
+                      href={link.href} 
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
+          ))}
+        </motion.div>
+        
+        <motion.div 
+          className="mt-8 pt-8 border-t text-center text-muted-foreground"
+          variants={itemVariants}
+        >
+          <p>&copy; 2025 Conference. All rights reserved.</p>
+        </motion.div>
       </div>
-      <div className="mt-8 pt-8 border-t text-center text-muted-foreground">
-        <p>&copy; 2025 Conference. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+    </motion.footer>
   )
 }
 

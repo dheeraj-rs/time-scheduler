@@ -36,6 +36,8 @@ const nextConfig: NextConfig = {
     }
     return config
   },
+  basePath: process.env.NODE_ENV === 'production' ? '/time-scheduler' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/time-scheduler/' : '',
 };
 
 export default nextConfig;

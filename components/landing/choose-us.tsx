@@ -2,8 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Users } from 'lucide-react';
-import Link from 'next/link';
-import { Card } from '@/components/ui/card';
 
 const containerVariants = {
   hidden: { opacity: 0 },

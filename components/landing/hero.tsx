@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { Calendar, MapPin, Ticket, Building2 } from 'lucide-react';
+import { Calendar, MapPin, Ticket, Building2, ArrowDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -267,6 +267,23 @@ export function LandingHero() {
           </motion.div>
         </motion.div>
       </motion.div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="flex flex-col items-center"
+        >
+          <div className="w-[2px] h-16 bg-gradient-to-b from-primary/50 to-primary mb-2" />
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <ArrowDown className="w-6 h-6 text-primary" />
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }

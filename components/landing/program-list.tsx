@@ -2,266 +2,112 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Calendar, Clock, MapPin, ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, MapPin, Tag } from 'lucide-react';
+import { Card, CardContent} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { programs } from '@/lib/data/programs';
 import { format } from 'date-fns';
-import { useEffect, useRef, useState } from 'react'
-import { useScrollStore } from '@/lib/store/scroll-store'
-import { useRouter } from 'next/navigation'
 
-// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
+      staggerChildren: 0.1
     }
   }
 };
 
-const cardVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 50,
-    scale: 0.95
-  },
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15
-    }
-  },
-  hover: {
-    scale: 1.02,
-    y: -5,
-    transition: {
-      type: "spring",
-      stiffness: 400,
-      damping: 10
-    }
-  }
-};
-
-const imageVariants = {
-  hover: {
-    scale: 1.1,
-    transition: {
-      duration: 0.4
-    }
-  }
-};
-
-const imageContainerVariants = {
-  hover: {
-    scale: 1.05,
-    transition: {
-      duration: 0.4,
-      ease: "easeOut"
-    }
-  }
-};
-
-const overlayVariants = {
-  initial: {
-    opacity: 0.4,
-    background: "linear-gradient(165deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)",
-  },
-  hover: {
-    opacity: 0.65,
-    background: "linear-gradient(165deg, rgba(var(--primary-rgb)/0.2) 0%, rgba(0,0,0,0.85) 100%)",
-    transition: {
-      duration: 0.4
-    }
-  }
-};
-
-const glassVariants = {
-  initial: {
-    opacity: 0,
-    background: "radial-gradient(circle at center, rgba(var(--primary-rgb)/0.05) 0%, transparent 70%)",
-  },
-  hover: {
-    opacity: 1,
-    background: "radial-gradient(circle at center, rgba(var(--primary-rgb)/0.1) 0%, transparent 70%)",
-    transition: {
-      duration: 0.3
+      duration: 0.5
     }
   }
 };
 
 export function ProgramList() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const { setScrollPosition, getScrollPosition, clearScrollPosition } = useScrollStore()
-  const scrollKey = 'featured-programs'
-  const router = useRouter()
-
-  useEffect(() => {
-    const savedPosition = getScrollPosition(scrollKey)
-    if (savedPosition && sectionRef.current) {
-      window.scrollTo({
-        top: savedPosition,
-        behavior: 'instant'
-      })
-    }
-    clearScrollPosition(scrollKey)
-  }, [getScrollPosition, clearScrollPosition])
-
-  const handleProgramClick = (programId: string | number) => {
-    setScrollPosition(scrollKey, window.scrollY)
-    router.push(`/program/${programId}`)
-  }
-
-  const displayPrograms = programs.slice(0, 3);
-
   return (
-    <motion.section 
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-b from-background via-primary/5 to-background"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={containerVariants}
-      id="featured-programs"
-    >
-      <div className="container mx-auto px-4">
-        <motion.div 
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+      <div className="container mx-auto px-4 relative">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
           className="text-center mb-12"
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0 }
-          }}
         >
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             Featured Programs
           </h2>
-          <p className="text-muted-foreground mt-4">
-            Discover our carefully curated selection of upcoming events
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Discover our upcoming events and secure your spot today
           </p>
         </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayPrograms.map((program) => (
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {programs.map((program) => (
             <motion.div
               key={program.id}
-              variants={cardVariants}
-              whileHover="hover"
-              onClick={() => handleProgramClick(program.id)}
-              className="cursor-pointer group"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={itemVariants}
+              className="group"
             >
-              <Card className="group overflow-hidden border-muted-foreground/20 relative h-full flex flex-col hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 bg-gradient-to-b from-background/95 to-background">
-                <motion.div 
-                  className="relative h-64 overflow-hidden"
-                  variants={imageContainerVariants}
-                  whileHover="hover"
-                >
-                  <motion.div 
-                    className="absolute inset-0 bg-cover bg-center transform will-change-transform"
-                    style={{ 
-                      backgroundImage: `url(${program.imageUrl})`,
-                      backgroundPosition: 'center 30%'
-                    }}
-                    variants={imageVariants}
+              <Card className="h-full overflow-hidden hover:shadow-xl transition-all duration-300 border-muted-foreground/20">
+                <div className="relative">
+                  <div 
+                    className="h-40 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                    style={{ backgroundImage: `url(${program.imageUrl})` }}
                   />
-                  <motion.div 
-                    className="absolute inset-0"
-                    variants={overlayVariants}
-                    initial="initial"
-                    whileHover="hover"
-                  />
-                  <motion.div 
-                    className="absolute inset-0"
-                    variants={glassVariants}
-                    initial="initial"
-                    whileHover="hover"
-                  />
-                  <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  <div className="absolute top-2 right-2 flex gap-1">
                     <Badge 
                       variant={program.tickets === 'Limited' ? 'destructive' : 'secondary'}
-                      className="bg-background/60 shadow-lg border border-white/10"
+                      className="backdrop-blur-sm bg-background/80 text-xs"
                     >
                       {program.tickets}
                     </Badge>
-                    {program.featured && (
-                      <Badge 
-                        variant="default"
-                        className="bg-primary/60 shadow-lg border border-primary/20"
-                      >
-                        Featured
-                      </Badge>
-                    )}
                   </div>
-                </motion.div>
+                  {program.featured && (
+      <div className="absolute -rotate-45 text-xs font-medium py-1 px-6 -left-6 top-4 bg-primary/90 backdrop-blur-md text-primary-foreground shadow-lg">
+        Featured
+      </div>
+    )}
+                </div>
 
-                <CardHeader className="pb-2 relative">
-                  <div className="absolute -top-12 left-4 right-4 flex items-center justify-between">
-                    <div className="bg-background/70 px-3 py-1 rounded-full shadow-lg">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="w-4 h-4 text-primary" />
-                        <span>{format(program.date, 'dd MMM yyyy')}</span>
-                      </div>
-                    </div>
-                    <div className="bg-background/70 px-3 py-1 rounded-full shadow-lg">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Clock className="w-4 h-4 text-primary" />
-                        <span>{program.time}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mt-2">
+                <CardContent className="p-4">
+                  <h3 className="font-semibold text-sm mb-2 line-clamp-1 group-hover:text-primary transition-colors">
                     {program.title}
-                  </CardTitle>
-                </CardHeader>
+                  </h3>
 
-                <CardContent className="flex-1 flex flex-col">
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                    {program.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-muted-foreground mb-6">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <span className="text-sm truncate">{program.venue.name}</span>
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Calendar className="w-3 h-3 text-primary" />
+                      <span className="truncate">
+                        {format(program.date, 'dd MMM yyyy')}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <MapPin className="w-3 h-3 text-primary" />
+                      <span className="truncate">{program.venue.name}</span>
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t mt-auto">
-                    <div>
-                      <div className="font-semibold text-primary text-lg">
-                        AED {program.ticketPrice}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {program.registeredAttendees}/{program.capacity} registered
-                      </div>
+                  <div className="flex items-center justify-between pt-2 border-t">
+                    <div className="text-primary font-medium text-sm">
+                      AED {program.ticketPrice}
                     </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="bg-background/80 backdrop-blur-sm hover:bg-background"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleProgramClick(program.id);
-                        }}
-                      >
-                        Details
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        className="bg-primary/90 hover:bg-primary backdrop-blur-sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/program/${program.id}/tickets`);
-                        }}
-                      >
-                        Book Now
-                      </Button>
-                    </div>
+                    <Button size="sm" variant="ghost" className="h-7 px-2 hover:bg-primary/5" asChild>
+                      <Link href={`/program/${program.id}`}>
+                        View Details
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -270,26 +116,25 @@ export function ProgramList() {
         </div>
 
         <motion.div 
-          className="mt-12 text-center"
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0 }
-          }}
+          variants={itemVariants}
+          className="text-center mt-12"
         >
           <Button 
-            onClick={() => handleProgramClick(program.id)}
-            size="lg" 
-            variant="outline"
-            className="group bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 hover:from-primary/20 hover:via-primary/30 hover:to-primary/20 border-primary/20 hover:border-primary/30 transition-all duration-300 min-w-[200px] h-12"
             asChild
+            className="relative overflow-hidden bg-gradient-to-r from-background/80 to-background hover:from-background/90 hover:to-background/80 text-foreground shadow-lg hover:shadow-xl hover:shadow-foreground/5 transition-all duration-300 group border border-primary/20"
+            size="lg"
           >
-            <Link href="/program" className="flex items-center gap-2">
-              View All Programs
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link 
+              href="/program" 
+              className="flex items-center gap-2 px-8 py-3 font-medium"
+            >
+              <span className="relative z-10 text-primary">View All Programs</span>
+              <Tag className="w-5 h-5 relative z-10 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
           </Button>
         </motion.div>
       </div>
-    </motion.section>
+    </section>
   );
 }

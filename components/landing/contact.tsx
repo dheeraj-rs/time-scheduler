@@ -59,18 +59,16 @@ const socialLinks = [
 const Contact = () => {
   return (
     <motion.footer 
-      className="relative bg-gradient-to-b from-background via-background/95 to-background border-t"
+      className="relative py-16"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-      </div>
-
-      <div className="relative container mx-auto px-4 py-16">
+      {/* Glass background */}
+      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
+      
+      <div className="relative container mx-auto px-4">
         <motion.div 
           className="text-center mb-12"
           variants={itemVariants}
@@ -148,9 +146,9 @@ const Contact = () => {
             </motion.div>
           ))}
         </motion.div>
-
+<div className="section-transition"/>
         <motion.div 
-          className="flex flex-col md:flex-row justify-between items-center pt-8 border-t"
+          className="flex flex-col md:flex-row justify-between items-center pt-8"
           variants={containerVariants}
         >
           <motion.div variants={itemVariants} className="mb-4 md:mb-0">

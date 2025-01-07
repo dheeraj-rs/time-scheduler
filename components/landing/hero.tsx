@@ -3,13 +3,12 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Calendar, MapPin, Ticket, Building2, ArrowDown } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { BackgroundMedia } from '@/components/landing/background-media';
 
-// Enhanced animation variants
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -41,53 +40,40 @@ const countdownVariants = {
   initial: { 
     opacity: 0, 
     scale: 0.8,
-    rotateX: -30
+    rotateX: -30,
+    y: 20
   },
   animate: { 
     opacity: 1, 
     scale: 1,
     rotateX: 0,
+    y: 0,
     transition: {
       type: "spring",
-      stiffness: 300,
-      damping: 25
+      stiffness: 200,
+      damping: 20,
+      mass: 1
     }
   }
 };
 
-const numberVariants = {
-  initial: { y: 50, opacity: 0 },
-  animate: { 
-    y: 0, 
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 30
-    }
+const letterVariants = {
+  initial: { 
+    opacity: 0,
+    y: 20,
+    rotate: 10,
+    scale: 0.5
   },
-  exit: { y: -50, opacity: 0 }
-};
-
-const buttonVariants = {
-  initial: { opacity: 0, scale: 0.9 },
   animate: { 
-    opacity: 1, 
+    opacity: 1,
+    y: 0,
+    rotate: 0,
     scale: 1,
     transition: {
-      duration: 0.5,
-      ease: "easeOut"
+      type: "spring",
+      damping: 10,
+      stiffness: 100
     }
-  },
-  hover: { 
-    scale: 1.05,
-    transition: {
-      duration: 0.2,
-      ease: "easeInOut"
-    }
-  },
-  tap: { 
-    scale: 0.95 
   }
 };
 
@@ -103,7 +89,7 @@ export function LandingHero() {
     title: "International Science Conference 2024",
     date: new Date('2025-01-15'),
     location: "Global Science Center",
-    imageUrl: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=2070",
     videoUrl: "/conference-video.mp4"
   }), []);
 
@@ -118,111 +104,102 @@ export function LandingHero() {
   }, [nextEvent.date]);
 
   useEffect(() => {
-    let mounted = true;
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
 
-    const updateTime = () => {
-      if (mounted) {
-        setTimeLeft(calculateTimeLeft());
-      }
-    };
-
-    // Initial calculation
-    updateTime();
-
-    // Update every second
-    const timer = setInterval(updateTime, 1000);
-
-    return () => {
-      mounted = false;
-      clearInterval(timer);
-    };
+    return () => clearInterval(timer);
   }, [calculateTimeLeft]);
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      <BackgroundMedia 
-        imageUrl={nextEvent.imageUrl}
-        videoUrl={nextEvent.videoUrl}
-      />
+    <section className="relative min-h-[100svh] overflow-hidden">
+      <div className="absolute inset-0">
+        <BackgroundMedia 
+          imageUrl={nextEvent.imageUrl}
+          videoUrl={nextEvent.videoUrl}
+          variants={backgroundVariants}
+        />
+        
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/30 to-background/70" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--primary-rgb),0.05),transparent_70%)]" />
+      </div>
       
       <motion.div 
         variants={staggerChildren}
-        initial="hidden"
-        animate="visible"
-        className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-start pt-20"
+        initial="initial"
+        animate="animate"
+        className="relative container mx-auto px-4 min-h-[100svh] flex flex-col justify-center items-start"
       >
-        <motion.h1 
+        <motion.div 
           variants={fadeIn}
-          className="text-6xl font-bold text-white pt-20 mb-6 drop-shadow-lg"
+          className="md:hidden mb-4 inline-flex items-center bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-4 py-2"
         >
-          {nextEvent.title}
+          <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-primary" />
+          <span className="text-sm text-primary font-medium">Live Event</span>
+        </motion.div>
+
+        <motion.h1 
+          variants={letterVariants}
+          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight relative max-w-4xl"
+        >
+          <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 blur-3xl" />
+          {nextEvent.title.split('').map((char, i) => (
+            <motion.span
+              key={i}
+              variants={letterVariants}
+              className={`inline-block ${
+                char === ' ' ? 'mr-2 sm:mr-4' : 'mr-[0.01em] sm:mr-[0.02em]'
+              } bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 hover:text-primary transition-colors duration-200`}
+            >
+              {char}
+            </motion.span>
+          ))}
         </motion.h1>
         
         <motion.div 
           variants={fadeIn}
-          className="flex items-center gap-4 text-white mb-8"
+          className="flex flex-wrap items-center gap-2 sm:gap-4 text-muted-foreground mb-8"
         >
-          <motion.div 
-            whileHover={{ scale: 1.1 }}
-            className="flex items-center gap-2"
-          >
-            <Calendar className="w-6 h-6" />
-            <span>{format(nextEvent.date, 'dd/MM/yyyy')}</span>
-          </motion.div>
-          <motion.div 
-            whileHover={{ scale: 1.1 }}
-            className="flex items-center gap-2"
-          >
-            <MapPin className="w-6 h-6 ml-4" />
-            <span>{nextEvent.location}</span>
-          </motion.div>
+          <div className="flex items-center gap-2 bg-background/50 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+            <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <span className="text-sm sm:text-base">{format(nextEvent.date, 'dd MMM yyyy')}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-background/50 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <span className="text-sm sm:text-base">{nextEvent.location}</span>
+          </div>
         </motion.div>
 
         <motion.div 
           variants={staggerChildren}
-          className="grid grid-cols-4 gap-4 max-w-2xl mb-12"
+          className="grid grid-cols-4 gap-1 sm:gap-2 mb-4 sm:mb-6 w-full max-w-[400px]"
         >
           {Object.entries(timeLeft).map(([unit, value]) => (
             <motion.div
               key={unit}
               variants={countdownVariants}
-              whileHover={{ scale: 1.02, rotateX: 5 }}
-              className="countdown-card relative group"
+              whileHover={{ 
+                scale: 1.02,
+                rotateX: 2,
+                translateZ: 5,
+                transition: {
+                  duration: 0.2,
+                  ease: "easeOut"
+                }
+              }}
+              className="perspective-1000"
             >
-              <Card className="relative overflow-hidden backdrop-blur-xl bg-black/20 border-primary/20 shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-all duration-700" />
-                
-                <div className="relative z-10 p-4 text-center">
-                  <div className="countdown-number-wrapper">
-                    <motion.div 
-                      className="text-4xl font-bold font-mono tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70"
-                      initial={false}
-                      animate={{ 
-                        opacity: [0.8, 1],
-                        scale: [0.98, 1],
-                        transition: { 
-                          duration: 0.6,
-                          repeat: Infinity,
-                          repeatType: "reverse"
-                        }
-                      }}
-                    >
+              <Card className="countdown-card relative overflow-hidden border-primary/20 bg-background/30 backdrop-blur-md">
+                <CardContent className="p-1">
+                  <div className="text-center">
+                    <div className="text-sm sm:text-base md:text-lg font-bold text-primary countdown-number">
                       {value.toString().padStart(2, '0')}
-                      <div className="countdown-shine" />
-                    </motion.div>
+                    </div>
+                    <div className="text-[8px] uppercase tracking-wider text-muted-foreground/80 font-medium">
+                      {unit}
+                    </div>
                   </div>
-                  
-                  <motion.div 
-                    className="mt-2 text-xs uppercase tracking-[0.2em] text-white/70 font-medium"
-                  >
-                    {unit}
-                  </motion.div>
-                </div>
-
-                <div className="countdown-border-glow" />
-                <div className="countdown-progress" style={{ 
-                  '--progress': unit === 'seconds' ? `${(value / 60) * 100}%` : '100%'
-                } as React.CSSProperties} />
+                </CardContent>
               </Card>
             </motion.div>
           ))}
@@ -230,60 +207,52 @@ export function LandingHero() {
 
         <motion.div 
           variants={fadeIn}
-          className="flex flex-col sm:flex-row items-center gap-4 max-w-xl"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
         >
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
+          <Button 
+            size="lg" 
+            className="relative overflow-hidden backdrop-blur-sm bg-primary/80 hover:bg-primary/90 border border-primary/20 shadow-lg shadow-primary/20 transition-all duration-300 w-full sm:w-auto"
+            asChild
           >
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto px-8 h-14 text-lg bg-primary hover:bg-primary/90 transform transition-all duration-200 shadow-lg hover:shadow-primary/25"
-              asChild
-            >
-              <Link href="/program/tickets" className="flex items-center justify-center gap-2">
-                <Ticket className="h-5 w-5" />
-                <span>Book Tickets</span>
-              </Link>
-            </Button>
-          </motion.div>
+            <Link href="/program/tickets" className="flex items-center justify-center gap-2 px-4 sm:px-8">
+              <Ticket className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-medium">Book Tickets</span>
+            </Link>
+          </Button>
           
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
+          <Button 
+            size="lg" 
+            variant="outline"
+            className="relative overflow-hidden backdrop-blur-sm bg-background/20 hover:bg-background/30 border-primary/20 hover:border-primary/40 shadow-lg shadow-black/5 transition-all duration-300 w-full sm:w-auto"
+            asChild
           >
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto px-8 h-14 text-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-2 border-white/20 hover:border-white/40 transform transition-all duration-200"
-              asChild
-            >
-              <Link href="/venues" className="flex items-center justify-center gap-2">
-                <Building2 className="h-5 w-5" />
-                <span>Explore Venues</span>
-              </Link>
-            </Button>
-          </motion.div>
+            <Link href="/venues" className="flex items-center justify-center gap-2 px-4 sm:px-8">
+              <Building2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-medium">Explore Venues</span>
+            </Link>
+          </Button>
         </motion.div>
       </motion.div>
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+
+      <motion.div
+        className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
         <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="flex flex-col items-center"
+          animate={{
+            y: [0, 10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         >
-          <div className="w-[2px] h-16 bg-gradient-to-b from-primary/50 to-primary mb-2" />
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <ArrowDown className="w-6 h-6 text-primary" />
-          </motion.div>
+          <ArrowDown className="w-5 h-5 sm:w-6 sm:h-6 text-primary animate-bounce" />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

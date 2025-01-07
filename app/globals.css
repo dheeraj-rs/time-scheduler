@@ -6,6 +6,17 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --countdown-bg: 217 90% 60% / 0.05;
+  --countdown-border: 217 90% 60% / 0.2;
+  --countdown-text: 0 0% 100%;
+  --countdown-glow: 217 90% 60% / 0.5;
+  --countdown-shine: 217.2 91.2% 59.8% / 0.1;
+  --neon-glow: 217 90% 60%;
+  --glass-border: 0 0% 100% / 0.1;
+  --glass-shine: 0 0% 100% / 0.05;
+  --card-bg: 222 47% 11% / 0.8;
+  --countdown-accent: 217 90% 60%;
+  --primary-rgb: 217, 90, 60;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,30 +24,35 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --countdown-bg: 0 0% 0% / 0.2;
+    --countdown-border: 0 0% 100% / 0.1;
+    --countdown-text: 0 0% 100%;
+    --countdown-glow: 217.2 91.2% 59.8% / 0.5;
+    --countdown-shine: 217.2 91.2% 59.8% / 0.2;
   }
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222 47% 11%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -45,25 +61,25 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -82,56 +98,155 @@
 }
 
 .countdown-card {
-  perspective: 1200px;
+  perspective: 400px;
   transform-style: preserve-3d;
-  backdrop-filter: blur(12px);
+  position: relative;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  min-width: 40px;
+  max-width: 80px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.countdown-card .card {
+  background: linear-gradient(
+    165deg,
+    hsl(var(--card-bg) / 0.4),
+    hsl(var(--card-bg) / 0.1)
+  );
+  backdrop-filter: blur(8px);
+  border: 1px solid hsl(var(--primary) / 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 
+    0 0 6px -4px hsl(var(--primary) / 0.15),
+    0 2px 4px -4px hsl(var(--card-bg));
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.countdown-card:hover .card {
+  transform: translateZ(8px) rotateX(3deg);
+  border-color: hsl(var(--primary) / 0.3);
+  box-shadow: 
+    0 0 15px -5px hsl(var(--primary) / 0.3),
+    0 5px 10px -6px hsl(var(--card-bg));
 }
 
 .countdown-number-wrapper {
   position: relative;
-  padding: 0.5rem;
-  background: linear-gradient(
-    180deg,
-    hsl(var(--primary)/0.15) 0%,
-    hsl(var(--primary)/0.05) 100%
-  );
-  border-radius: 0.75rem;
-  box-shadow:
-    0 4px 24px hsl(var(--primary)/0.2),
-    inset 0 1px 2px hsl(var(--primary)/0.1);
-  overflow: hidden;
+  padding: 0.125rem 0.25rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.countdown-card:hover .countdown-number-wrapper {
+  transform: scale(1.05) translateZ(15px);
+  box-shadow: 
+    0 0 40px -8px hsl(var(--primary) / 0.4);
+}
+
+.countdown-number {
+  background: linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 10px hsl(var(--primary) / 0.3);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.countdown-card:hover .countdown-number {
+  transform: scale(1.1);
+  text-shadow: 0 0 15px hsl(var(--primary) / 0.4);
+}
+
+.countdown-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground) / 0.8);
+  font-size: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+.countdown-card:hover .countdown-label {
+  opacity: 0.9;
+}
+
+/* Animated border effect */
+.countdown-card::before,
+.countdown-card::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from var(--angle),
+    hsl(var(--neon-glow) / 0),
+    hsl(var(--neon-glow) / 1),
+    hsl(var(--neon-glow) / 0)
+  );
+  border-radius: 1rem;
+  animation: rotate-border 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.countdown-card:hover::before,
+.countdown-card:hover::after {
+  opacity: 1;
+}
+
+/* Shine effect */
 .countdown-shine {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
     transparent,
-    hsl(var(--primary)/0.3),
+    hsl(var(--glass-shine)),
     transparent
   );
-  transform: translateX(-100%);
-  animation: shine 2s infinite;
+  transform: translateX(-100%) skewX(-15deg);
+  animation: shine 3s infinite;
   pointer-events: none;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate-border {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .countdown-border-glow {
   position: absolute;
   inset: 0;
-  padding: 1px;
-  border-radius: inherit;
   background: linear-gradient(
     45deg,
     transparent,
-    hsl(var(--primary)/0.3),
+    hsl(var(--primary) / 0.3),
     transparent
   );
-  mask: linear-gradient(black, black) content-box,
-        linear-gradient(black, black);
-  mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: none;
 }
 
 .countdown-card:hover .countdown-border-glow {
@@ -143,14 +258,22 @@
   bottom: 0;
   left: 0;
   width: var(--progress);
-  height: 2px;
+  height: 1px;
   background: linear-gradient(
     90deg,
     transparent,
-    hsl(var(--primary)/0.8),
+    hsl(var(--neon-glow)),
     transparent
   );
-  transition: width 1s linear;
+  opacity: 0.7;
+  filter: drop-shadow(0 0 10px hsl(var(--neon-glow)));
+  transition: all 0.3s ease;
+}
+
+.countdown-card:hover .countdown-progress {
+  height: 2px;
+  opacity: 1;
+  filter: drop-shadow(0 0 15px hsl(var(--neon-glow)));
 }
 
 @keyframes float {
@@ -158,12 +281,16 @@
     transform: translateY(0) rotateX(0);
   }
   50% {
-    transform: translateY(-4px) rotateX(2deg);
+    transform: translateY(-2px) rotateX(2deg);
   }
 }
 
 .countdown-card {
-  animation: float 4s ease-in-out infinite;
+  animation: float 3s ease-in-out infinite;
+}
+
+.countdown-card:hover {
+  animation-play-state: paused;
 }
 
 @keyframes shine {
@@ -215,11 +342,11 @@
 
 @layer utilities {
   .glass-effect {
-    @apply backdrop-blur-md bg-background/30 border-white/10;
+    @apply backdrop-blur-md bg-background/30 border border-white/10;
     box-shadow: 
-      0 4px 6px -1px rgb(0 0 0 / 0.1), 
-      0 2px 4px -2px rgb(0 0 0 / 0.1),
-      inset 0 1px 0 0 rgb(255 255 255 / 0.1);
+      0 4px 6px -1px rgb(0 0 0 / 0.05), 
+      0 2px 4px -2px rgb(0 0 0 / 0.05),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.05);
   }
 
   .nav-link-hover {
@@ -261,4 +388,227 @@ html {
   0% { background-position: 0% center; }
   50% { background-position: 100% center; }
   100% { background-position: 0% center; }
+}
+
+.section-transition {
+  position: relative;
+}
+
+.section-transition::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--primary) / 0.2) 50%,
+    transparent 100%
+  );
+}
+
+.section-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--background) / 0.1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Add these styles to your globals.css */
+.animated-background {
+  pointer-events: none;
+  will-change: transform;
+}
+
+.animated-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    var(--background) 100%
+  );
+  opacity: 0.8;
+}
+
+/* Section transitions */
+.section-transition {
+  position: relative;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--background) 50%,
+    transparent
+  );
+}
+
+/* Ensure content stays above background */
+.content-layer {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  background: transparent;
+}
+
+/* Add these new styles */
+.content-layer {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+}
+
+.section-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-transition::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent,
+    var(--background) 100%
+  );
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.animated-background {
+  --dot-size: 1px;
+  --dot-space: 22px;
+  background: 
+    linear-gradient(to right, var(--primary)/0.2 var(--dot-size), transparent var(--dot-size)) 0 0 / var(--dot-space) var(--dot-space),
+    linear-gradient(to bottom, var(--primary)/0.2 var(--dot-size), transparent var(--dot-size)) 0 0 / var(--dot-space) var(--dot-space);
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+
+/* 3D Transforms */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Enhanced section transitions */
+.section-transition {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.section-transition::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    hsl(var(--primary) / 0.03),
+    transparent 70%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.section-content {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0);
+  backdrop-filter: blur(8px);
+  background: linear-gradient(
+    to bottom,
+    var(--background)/0.3,
+    var(--background)/0.1
+  );
+  border: 1px solid var(--primary)/0.1;
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1),
+    inset 0 1px 0 0 rgb(255 255 255 / 0.1);
+}
+
+/* Animated background patterns */
+.bg-pattern {
+  background-image: 
+    linear-gradient(to right, var(--primary)/0.2 1px, transparent 1px),
+    linear-gradient(to bottom, var(--primary)/0.2 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px) translateZ(20px);
+}
+
+.countdown-number {
+  color: hsl(var(--countdown-text));
+}
+
+.countdown-label {
+  color: hsl(var(--countdown-text-light));
+}
+
+@keyframes float-pulse {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.float-pulse {
+  animation: float-pulse 2s ease-in-out infinite;
+}
+
+/* Event Background Effects */
+.snow-particle {
+  filter: blur(1px);
+  opacity: 0.8;
+  backdrop-filter: blur(2px);
+}
+
+.confetti-particle {
+  filter: blur(0.5px);
+  mix-blend-mode: screen;
+}
+
+.leaves-particle {
+  filter: blur(1px);
+  opacity: 0.6;
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+.event-particle {
+  animation: float-particle 3s ease-in-out infinite;
 }

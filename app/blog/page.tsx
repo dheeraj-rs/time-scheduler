@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatedPage } from '@/components/layout/animated-page';
+import { itemAnimationVariants } from '@/lib/animations';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
@@ -15,27 +17,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5
-    }
-  }
-};
 
 const blogPosts = [
   {
@@ -84,13 +65,9 @@ const categories = [
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <AnimatedPage>
       <div className="container mx-auto px-4 py-8">
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
+        <motion.div variants={itemAnimationVariants}>
           <div className="mb-6">
             <Link
               href="/"
@@ -103,7 +80,7 @@ export default function BlogPage() {
 
           <motion.div 
             className="max-w-4xl mx-auto text-center mb-12"
-            variants={itemVariants}
+            variants={itemAnimationVariants}
           >
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-4">
               Blog & Insights
@@ -115,7 +92,7 @@ export default function BlogPage() {
 
           <motion.div 
             className="max-w-4xl mx-auto mb-8"
-            variants={itemVariants}
+            variants={itemAnimationVariants}
           >
             <div className="flex flex-col md:flex-row gap-4">
               <Input
@@ -140,12 +117,12 @@ export default function BlogPage() {
 
           <motion.div 
             className="max-w-4xl mx-auto grid gap-6"
-            variants={containerVariants}
+            variants={itemAnimationVariants}
           >
             {blogPosts.map((post) => (
               <motion.div
                 key={post.id}
-                variants={itemVariants}
+                variants={itemAnimationVariants}
                 whileHover={{ y: -5 }}
                 className="group"
               >
@@ -200,7 +177,7 @@ export default function BlogPage() {
 
           <motion.div 
             className="max-w-4xl mx-auto mt-8 flex justify-center"
-            variants={itemVariants}
+            variants={itemAnimationVariants}
           >
             <Button variant="outline" className="group">
               Load more articles
@@ -209,6 +186,6 @@ export default function BlogPage() {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </AnimatedPage>
   );
 } 

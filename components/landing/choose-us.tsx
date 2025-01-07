@@ -27,15 +27,18 @@ const itemVariants = {
 function Chooseus() {
   return (
     <motion.section 
-      className="py-20 bg-muted/50"
+      className="relative py-20"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
     >
-      <div className="container mx-auto">
+      {/* Glass background */}
+      <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+      
+      <div className="relative container mx-auto">
         <motion.h2 
-          className="text-3xl font-bold text-center mb-12"
+          className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
           variants={itemVariants}
         >
           Why Choose Us

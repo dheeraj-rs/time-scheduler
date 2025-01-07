@@ -1,0 +1,105 @@
+@layer utilities {
+  .carousel-container {
+    perspective: 1500px;
+    transform-style: preserve-3d;
+    position: relative;
+    padding: 2rem 0;
+    overflow: hidden;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+  }
+
+  .carousel-track {
+    transform-style: preserve-3d;
+    display: flex;
+    gap: 2rem;
+    animation: infiniteScroll 60s linear infinite;
+    width: max-content;
+    will-change: transform;
+    padding: 2rem 4rem;
+  }
+
+  .carousel-slide {
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    opacity: 0.85;
+    flex: 0 0 400px;
+    width: 400px;
+    min-height: 550px;
+    transform: translateZ(0);
+  }
+
+  .carousel-track:hover {
+    animation-play-state: paused;
+  }
+
+  .carousel-slide:hover {
+    opacity: 1;
+    transform: scale(1.05) translateZ(30px);
+    z-index: 10;
+  }
+
+  @keyframes infiniteScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-50% - 1rem));
+    }
+  }
+
+  /* Smooth movement enhancement */
+  @media (prefers-reduced-motion: no-preference) {
+    .carousel-track {
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-play-state: running;
+    }
+
+    .carousel-track::before,
+    .carousel-track::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .carousel-track::before {
+      left: 0;
+      background: linear-gradient(to right, hsl(var(--background)), transparent);
+    }
+
+    .carousel-track::after {
+      right: 0;
+      background: linear-gradient(to left, hsl(var(--background)), transparent);
+    }
+  }
+
+  /* Card styles */
+  .carousel-slide > div {
+    height: 100%;
+    width: 100%;
+    transform-origin: center center;
+    transition: transform 0.5s ease;
+  }
+
+  .carousel-slide .card {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(8px);
+    background: rgba(var(--card-rgb), 0.02);
+    border: 1px solid rgba(var(--card-foreground-rgb), 0.1);
+  }
+
+  .carousel-slide .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+} 
